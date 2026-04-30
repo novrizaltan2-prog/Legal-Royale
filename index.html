@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <!-- KRITIS untuk APK: nonaktifkan zoom & scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Legal Royale</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <div id="screen-splash" class="screen active">
+    <div class="splash-logo">
+      <div class="gavel-icon">⚖️</div>
+      <h1 class="game-title">LEGAL ROYALE</h1>
+      <p class="game-subtitle">Game Edukasi Hukum Indonesia</p>
+    </div>
+    <div class="splash-buttons">
+      <button class="btn btn-primary" onclick="GameApp.showScreen('screen-menu')">▶ MULAI</button>
+      <button class="btn btn-secondary" onclick="GameApp.showScreen('screen-tutorial')">📖 Tutorial</button>
+      <button class="btn btn-outline" onclick="GameApp.showScreen('screen-settings')">⚙️ Pengaturan</button>
+    </div>
+    <div class="version-tag">v1.0.0</div>
+  </div>
+
+  <!-- MENU UTAMA -->
+  <div id="screen-menu" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-splash')">← Kembali</button>
+      <h2>Menu Utama</h2>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="GameApp.showScreen('screen-courtroom')">
+        <div class="menu-card-icon">🏛️</div>
+        <div class="menu-card-title">Ruang Sidang</div>
+        <div class="menu-card-desc">Simulasi persidangan lengkap</div>
+      </div>
+      <div class="menu-card" onclick="GameApp.showScreen('screen-characters')">
+        <div class="menu-card-icon">👤</div>
+        <div class="menu-card-title">Karakter</div>
+        <div class="menu-card-desc">Peran di persidangan</div>
+      </div>
+      <div class="menu-card" onclick="GameApp.showScreen('screen-cases')">
+        <div class="menu-card-icon">📂</div>
+        <div class="menu-card-title">Pilih Kasus</div>
+        <div class="menu-card-desc">Kasus hukum Indonesia</div>
+      </div>
+      <div class="menu-card" onclick="GameApp.showScreen('screen-glossary')">
+        <div class="menu-card-icon">📚</div>
+        <div class="menu-card-title">Glosarium</div>
+        <div class="menu-card-desc">Istilah hukum</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUANG SIDANG -->
+  <div id="screen-courtroom" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-menu')">← Kembali</button>
+      <h2>Ruang Sidang</h2>
+      <div class="session-badge" id="session-label">Pembukaan</div>
+    </div>
+    <div class="character-stage" id="character-stage">
+      <div class="character-avatar" id="char-avatar">⚖️</div>
+      <div class="character-name-badge" id="char-name-badge">Hakim Ketua</div>
+      <div class="character-role-badge" id="char-role-badge">Hakim</div>
+    </div>
+    <div class="dialog-box" id="dialog-box">
+      <div class="dialog-speaker" id="dialog-speaker">Hakim Ketua</div>
+      <div class="dialog-text" id="dialog-text">Tekan "Mulai Sidang" untuk memulai...</div>
+      <div class="dialog-progress">
+        <div class="dialog-progress-bar" id="dialog-progress-bar"></div>
+      </div>
+    </div>
+    <div class="courtroom-controls">
+      <button class="btn btn-sm" id="btn-prev" onclick="DialogManager.prev()" disabled>◀</button>
+      <button class="btn btn-sm btn-primary" id="btn-play" onclick="DialogManager.startSession()">▶ Mulai Sidang</button>
+      <button class="btn btn-sm" id="btn-next" onclick="DialogManager.next()" disabled>▶▶</button>
+      <button class="btn btn-sm btn-outline" id="btn-replay" onclick="DialogManager.replay()">🔁</button>
+      <button class="btn btn-sm btn-outline" id="btn-skip" onclick="DialogManager.skip()">⏭</button>
+    </div>
+    <div class="character-selector-panel">
+      <div class="panel-label">Pilih karakter untuk voice-over:</div>
+      <div class="char-selector-grid" id="char-selector-grid"></div>
+    </div>
+    <div class="audio-status" id="audio-status">
+      <span>🔊</span> <span id="audio-status-text">Siap</span>
+    </div>
+  </div>
+
+  <!-- KARAKTER -->
+  <div id="screen-characters" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-menu')">← Kembali</button>
+      <h2>Daftar Karakter</h2>
+    </div>
+    <div class="characters-list" id="characters-list"></div>
+  </div>
+
+  <!-- KASUS -->
+  <div id="screen-cases" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-menu')">← Kembali</button>
+      <h2>Pilih Kasus Hukum</h2>
+    </div>
+    <div class="cases-list" id="cases-list"></div>
+  </div>
+
+  <!-- GLOSARIUM -->
+  <div id="screen-glossary" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-menu')">← Kembali</button>
+      <h2>Glosarium</h2>
+    </div>
+    <input type="text" id="glossary-search" class="search-input"
+           placeholder="Cari istilah..." oninput="GameApp.filterGlossary(this.value)" />
+    <div class="glossary-list" id="glossary-list"></div>
+  </div>
+
+  <!-- TUTORIAL -->
+  <div id="screen-tutorial" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-splash')">← Kembali</button>
+      <h2>Cara Bermain</h2>
+    </div>
+    <div class="tutorial-content" id="tutorial-content"></div>
+  </div>
+
+  <!-- PENGATURAN -->
+  <div id="screen-settings" class="screen">
+    <div class="screen-header">
+      <button class="btn-back" onclick="GameApp.showScreen('screen-splash')">← Kembali</button>
+      <h2>Pengaturan</h2>
+    </div>
+    <div class="settings-list">
+      <div class="settings-item">
+        <label>Volume</label>
+        <input type="range" id="vol-master" min="0" max="100" value="80"
+               oninput="AudioManager.setVolume(this.value/100);
+                        document.getElementById('vol-label').textContent=this.value+'%'" />
+        <span id="vol-label">80%</span>
+      </div>
+      <div class="settings-item">
+        <label>Kecepatan Dialog</label>
+        <select id="dialog-speed" onchange="DialogManager.setSpeed(this.value)">
+          <option value="slow">Lambat</option>
+          <option value="normal" selected>Normal</option>
+          <option value="fast">Cepat</option>
+        </select>
+      </div>
+      <div class="settings-item">
+        <label>Subtitle</label>
+        <button class="toggle-btn" id="toggle-subtitle"
+                onclick="GameApp.toggleSubtitle(this)">ON</button>
+      </div>
+      <div class="settings-item">
+        <label>Test Audio</label>
+        <button class="btn btn-outline btn-sm" onclick="AudioManager.testAudio()">🔊 Tes Suara</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Memuat...</div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/characters.js"></script>
+  <script src="js/audioManager.js"></script>
+  <script src="js/dialogManager.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
